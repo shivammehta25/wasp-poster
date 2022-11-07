@@ -1,17 +1,28 @@
 % The methods that you use goes here
+We combine left-to-right HMMs defined by neural networks with normalising flows to learn the distribution over the spoken utterances conditioned on text.
 \vspace{0.3cm}
 \begin{center}
   \vspace{-0.4cm}
-  \includegraphics[width=.9\linewidth]{homer_equation}
+  \includegraphics[height=\linewidth]{OverFlow.pdf}  
+  \vspace{-0.4cm}
 \end{center}
 \vspace{0.25em}
-\textsuperscript{[1]}\lipsum[1]
-\begin{alignat*}{2}
-  u^*(x) := argmin\quad &\mathrlap{\sum_{i=0}^{N-1} l(x_i, u_i) + V_f(X_{N})}&&\\
-  \text{subject to}\quad &x_{i+1} &&=\quad f(x_i, u_i),\\
-  &g(x_i, u_i)\quad && \le\quad 0\\
-  &x_0 &&=\quad x,\\
-  &x_N &&\in\quad \mathcal{T}
-\end{alignat*}
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.
-\vspace{2em} % Fill in to put references at the bottom
+
+Neural HMMs describe a distribution over discrete-time sequences, typically %(but not necessarily) 
+assuming a Gaussian distribution for each frame.
+Normalising flows,
+provide a method for turning simple \emph{latent} or \emph{source} distributions $Z$, such as Gaussians, into much more flexible \emph{target} distributions $X$ through deep learning.  
+The idea is to apply an invertible nonlinear transformation $f$ to the source distribution to obtain the target distribution, as $X=f(Z;\,W)$, where $f$ is parameterised by a neural network with weights $W$ and 
+%To ensure invertibility we require that 
+$x$ and $z$ have the same dimensionality.
+%The main advantage of 
+Invertibility allows us to compute the (log-)probability of %any observed outcome 
+$x$ using the change of variables formula
+\begin{align*}
+\ln p_{X}(x)
+& = \ln p_{Z}(f^{-1}(x;\,W))
++ \ln \vert \det J_{f^{-1}}(x;\,W) \vert
+\text{,}
+\end{align*}
+where $J_{f^{-1}}(x;\,W)$ is the Jacobian matrix of $f^{-1}$ evaluated at $x$.
+% \vspace{1em} % Fill in to put references at the bottom
